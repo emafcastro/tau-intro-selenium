@@ -14,7 +14,7 @@ def config(scope='session'):
     config = json.load(config_file)
 
   #Assert values are acceptable
-  assert config['browser'] in ['Chrome', 'Headless Chrome']
+  assert config['browser'] in ["Chrome", "Headless Chrome"]
   assert isinstance(config['implicit_wait'], int)
   assert config['implicit_wait'] > 0
 
@@ -26,9 +26,9 @@ def config(scope='session'):
 def browser(config):
 
   # Initialize the ChromeDriver instance
-  if config['browser'] == 'Chrome':
+  if config['browser'] == "Chrome":
     b = selenium.webdriver.Chrome(executable_path=r"D:\Documents\drivers\chromedriver.exe")
-  if config['browser'] == 'Headless Chrome':
+  elif config['browser'] == "Headless Chrome":
     opts = selenium.webdriver.ChromeOptions()
     opts.add_argument('headless')
     b = selenium.webdriver.Chrome(executable_path=r"D:\Documents\drivers\chromedriver.exe", options=opts)

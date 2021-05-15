@@ -1,12 +1,14 @@
 """
 These tests cover DuckDuckGo searches.
 """
-
+from pages.result_link_page import DuckDuckGoResultLinkPage
+import pytest
 from pages.result import DuckDuckGoResultPage
 from pages.search import DuckDuckGoSearchPage
 
 
-def test_basic_duckduckgo_searh(browser):
+@pytest.mark.parametrize('phrase', ['panda', 'python','polar bear'])
+def test_basic_duckduckgo_searh(browser, phrase):
     search_page = DuckDuckGoSearchPage(browser)
     result_page = DuckDuckGoResultPage(browser)
     PHRASE = "panda"
@@ -24,14 +26,47 @@ def test_basic_duckduckgo_searh(browser):
     #And the search result query is "panda"
     assert PHRASE == result_page.search_input_value()
 
-    print(*result_page.result_link_titles())
-    for title in result_page.result_link_titles():
-        assert PHRASE.lower() in title.lower()
-
     # And the search result links pertain to "panda"
-    #for title in result_page.result_link_titles():
-    #    try:
-    #        assert PHRASE.lower() in title.lower()
-    #    except AssertionError:
-    #        amount_errors += 1
-    #        continue
+    titles = result_page.result_link_titles()
+    matches = [t for t in titles if PHRASE.lower() in t.lower()]
+    assert len(matches) > 0
+
+
+def test_duckduckgo_search_manual(browser):
+    search_page = DuckDuckGoSearchPage(browser)
+    result_page = DuckDuckGoResultPage(browser)
+    PHRASE = "panda"
+
+    search_page.load()
+
+    search_page.search_manual(PHRASE)
+
+    assert PHRASE in result_page.title()
+
+
+def test_duckduckgo_click_result(browser):
+    search_page = DuckDuckGoSearchPage(browser)
+    result_page = DuckDuckGoResultPage(browser)
+    result_link_page = DuckDuckGoResultLinkPage(browser)
+    PHRASE = "panda"
+
+    search_page.load()
+    search_page.search_manual(PHRASE)
+
+    title = result_page.click_result_random()
+
+    assert title in result_link_page.title()
+
+def test_duckduckgo_expand_results(browser):
+    search_page = DuckDuckGoSearchPage(browser)
+    result_page = DuckDuckGoResultPage(browser)
+    PHRASE = "panda"
+
+    search_page.load()
+    search_page.search_manual(PHRASE)
+
+    count_before_more = result_page.result_link_titles()
+    result_page.click_more_results()
+    count_after_more = result_page.result_link_titles()
+
+    assert len(count_before_more) < len(count_after_more)

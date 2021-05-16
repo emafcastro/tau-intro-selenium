@@ -1,10 +1,11 @@
 """
 These tests cover DuckDuckGo searches.
 """
-from pages.result_link_page import DuckDuckGoResultLinkPage
+
 import pytest
 from pages.result import DuckDuckGoResultPage
 from pages.search import DuckDuckGoSearchPage
+from pages.result_link_page import DuckDuckGoResultLinkPage
 
 
 @pytest.mark.parametrize('phrase', ['panda', 'python','polar bear'])
@@ -70,3 +71,13 @@ def test_duckduckgo_expand_results(browser):
     count_after_more = result_page.result_link_titles()
 
     assert len(count_before_more) < len(count_after_more)
+
+def test_duckduckgo_autocomplete_suggestions(browser):
+    search_page = DuckDuckGoSearchPage(browser)
+    PHRASE = "panda"
+
+    search_page.load()
+    search_page.search_by_letter(PHRASE)
+
+    texts = search_page.get_autocomplete_items()
+    assert PHRASE in texts

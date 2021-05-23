@@ -5,3 +5,6 @@ pages/__pycache__/search.cpython-39.pyc
 tests/__pycache__/test_search.cpython-39-pytest-6.2.4.pyc
 .vscode/settings.json
 .vscode/launch.json
+pages/__pycache__/__init__.cpython-39.pyc
+tests/__init__.py
+tests/__pycache__/__init__.cpython-39.pyc

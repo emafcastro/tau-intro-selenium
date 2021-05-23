@@ -5,8 +5,8 @@ the page object for DuckDuckGo search page
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
 import time
+import random
 
 class DuckDuckGoSearchPage:
 
@@ -51,5 +51,19 @@ class DuckDuckGoSearchPage:
 
     def get_autocomplete_items(self):
         items = self.browser.find_elements(*self.AUTOCOMPLETE_ITEM)
+        return items
+
+    def get_autocomplete_items_text(self):
+        items = self.get_autocomplete_items()
         texts = [item.text for item in items]
         return texts
+
+    def select_random_option(self, items):
+        random_option = items[random.randint(0,len(items)-1)]
+        option_name = random_option.text
+        random_option.click()
+        return option_name
+
+        
+
+    
